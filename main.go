@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"os"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 	http.HandleFunc("/meta-num-input", handleMetaNumInput)
 	http.HandleFunc("/meta-num-output", handleMetaNumOutput)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil)
 }
 
 func execTemplate(w http.ResponseWriter, path string, data any) {

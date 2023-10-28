@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <title>App</title>
+  </head>
+  <body class="min-h-screen h-screen">
+    <h3 class="p-4 text-xl font-semibold text-center">Number formatter</h3>
+    <div class="flex h-[75%]">
+      <div class="flex-1 flex flex-col p-4 gap-2">
+        <label for="input-num" class="text-center"
+          >Masukan nomer yang ingin anda format disini</label
+        >
+        <textarea
+          name="input-num"
+          id="input-num"
+          class="border-2 resize-none h-[90%] p-3"
+          hx-post="/num-input"
+          hx-trigger="input"
+          hx-target="#output-num"
+          hx-swap="innerHTML"
+        ></textarea>
+        <div
+          hx-post="/meta-num-input"
+          hx-trigger="input from:#input-num"
+          hx-target="#input-meta"
+          hx-swap="innerHTML"
+          hx-include="#input-num"
+        ></div>
+        <div
+          hx-post="/meta-num-output"
+          hx-trigger="input from:#input-num"
+          hx-target="#output-meta"
+          hx-swap="innerHTML"
+          hx-include="#output-num"
+        ></div>
+
+        <div class="flex gap-2 justify-center" id="input-meta">
+          <p class="font-bold text-gray-500">count: 0</p>
+          <p class="font-bold text-gray-500">invalid: 0</p>
+        </div>
+      </div>
+      <div class="flex-1 flex flex-col p-4 gap-2">
+        <label for="output-num" class="text-center">Hasil</label>
+        <textarea
+          name="output-num"
+          id="output-num"
+          class="border-2 resize-none h-[90%] p-3"
+          readonly
+        ></textarea>
+        <div class="text-center" id="output-meta">
+          <p class="font-bold text-gray-500">count: 0</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <button
+        class="bg-gray-400 text-sm font-bold text-white py-3 px-4 rounded-xl"
+        id="download-btn"
+      >
+        Download .txt !!!
+      </button>
+    </div>
+  </body>
+
+  <script>
+    const downloadBtn = document.getElementById("download-btn");
+    const outputNum = document.getElementById("output-num");
+    downloadBtn.addEventListener("click", () => {
+      if (outputNum.value === "") return;
+
+      const blob = new Blob([outputNum.value], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "formattedNum.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</html>

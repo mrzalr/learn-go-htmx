@@ -34,7 +34,7 @@ func execTemplate(w http.ResponseWriter, path string, data any) {
 func numberFormatterHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		execTemplate(w, path.Join("template", "index.gohtml"), map[string]any{"numresult": "-"})
+		execTemplate(w, path.Join("template", "index.tmpl"), map[string]any{"numresult": "-"})
 	default:
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	}
